@@ -9,7 +9,7 @@ import {
 } from '../../utils/constants';
 import { addExpense, logInWithValidCredentials } from '../../utils/helperFunctions';
 
-describe.only('4 - Salve todas as informações do formulário no estado global', () => {
+describe('4 - Salve todas as informações do formulário no estado global', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/', {
       onBeforeLoad(win) {

@@ -1,146 +1,77 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addCurrencies, addExpenses, addTotalExpenses } from '../redux/actions';
+import { addCurrencies, addExpenses } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
-    outcome: 0,
+    value: '',
     description: '',
-    currency: '',
-    method: '',
-    tag: '',
+    currency: 'USD',
+    method: 'Cartão de crédito',
+    tag: 'Lazer',
     id: 0,
-    arrOfExpenses: [],
-    totalOutcome: [],
-    exchangeRates: {},
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { dispatch } = this.props;
-    const data = await this.fetchApiDataToCurrencies();
-    // console.log(data);
-    this.setState({ exchangeRates: data });
-    const bruteRequest = Object.keys(data);
-    const refinedRequest = bruteRequest.filter((currency) => currency !== 'USDT');
-    return dispatch(addCurrencies(refinedRequest));
+    dispatch(addCurrencies());
   }
 
-  fetchApiDataToCurrencies = async () => {
-    const request = await fetch('https://economia.awesomeapi.com.br/json/all');
-    const requestJson = await request.json();
-    return requestJson;
-  };
-
-  onOutcomeChange = ({ target }) => {
-    const { outcome, totalOutcome } = this.state;
-    const { value } = target;
+  onChange = ({ target }) => {
     this.setState({
-      outcome: value,
-      totalOutcome: [...totalOutcome, outcome],
+      [target.name]: target.value,
     });
   };
 
-  onDescritptionChange = ({ target }) => {
-    const { description } = this.state;
-    const { value } = target;
-    this.setState({ description: value });
-  };
-
-  onCurrencyHandleChange = (event) => {
-    const { target } = event;
-    const { currency } = this.state;
-    this.setState({ currency: target.value });
-  };
-
-  onPaymentHandleChange = (event) => {
-    const { target } = event;
-    const { method } = this.state;
-    this.setState({ method: target.value });
-  };
-
-  onCategoryHandleChange = (event) => {
-    const { target } = event;
-    const { tag } = this.state;
-    this.setState({ tag: target.value });
-  };
-
-  getOutcomes = () => {
-    const { arrOfExpenses } = this.state;
-    const outcome = arrOfExpenses.map((value) => {
-      const arrayOfRates = Object.values(value.exchangeRates);
-      const currentRate = arrayOfRates.find((rate) => rate.code === value.currency);
-      return (value.outcome * currentRate.ask);
-    });
-    console.log(outcome);
-    if (outcome.length === 0) return;
-    const total = outcome.reduce((acc, currVal) => acc + currVal);
-    console.log(total);
-    dispatch(addTotalExpenses(total));
-    return total;
-  };
-
-  onHandleSubmit = async () => {
-    const {
-      outcome,
-      description,
-      currency,
-      method,
-      tag,
-      arrOfExpenses,
-      id,
-      exchangeRates,
-    } = this.state;
+  onHandleSubmit = (e) => {
+    e.preventDefault();
     const { dispatch } = this.props;
+    const { id } = this.state;
 
-    this.setState({ id: id + 1 });
-    const objectOfExpenses = {
-      id,
-      outcome,
-      description,
-      currency,
-      method,
-      tag,
-      exchangeRates,
-    };
-    const data = await this.fetchApiDataToCurrencies();
-    this.setState({ exchangeRates: data });
-
-    this.setState({ arrOfExpenses: [...arrOfExpenses, objectOfExpenses] });
-    dispatch(addExpenses([...arrOfExpenses, objectOfExpenses]));
-    this.getOutcomes();
+    dispatch(addExpenses({ ...this.state }));
     this.setState({
+      value: '',
       description: '',
-      outcome: '',
+
+      id: id + 1,
     });
   };
 
   render() {
     const { currencies } = this.props;
+    const { value, description } = this.state;
     return (
       <>
-        <label htmlFor="outcome">
+        <label htmlFor="inputValue">
           Gasto
           <input
+            id="inputValue"
             type="number"
+            value={ value }
+            name="value"
             data-testid="value-input"
-            onChange={ this.onOutcomeChange }
+            onChange={ this.onChange }
           />
         </label>
-        <label htmlFor="description">
+        <label htmlFor="inputDescription">
           Descrição
           <input
+            id="inputDescription"
             type="text"
+            value={ description }
+            name="description"
             data-testid="description-input"
-            onChange={ this.onDescritptionChange }
+            onChange={ this.onChange }
           />
         </label>
-        <label>
+        <label htmlFor="inputCurrency">
           Câmbio
           <select
+            id="inputCurrency"
             name="currency"
             data-testid="currency-input"
-            onClick={ ((e) => this.onCurrencyHandleChange(e)) }
+            onChange={ this.onChange }
           >
             <option value="USD">{ currencies[0] }</option>
             <option value="CAD">{ currencies[1] }</option>
@@ -159,27 +90,29 @@ class WalletForm extends Component {
             <option value="DOGE">{ currencies[14] }</option>
           </select>
         </label>
-        <label htmlFor="payment">
+        <label htmlFor="inputMethod">
           Forma de Pagamento
           <select
-            name="payment"
+            id="inputMethod"
+            name="method"
             data-testid="method-input"
-            onClick={ (e) => this.onPaymentHandleChange(e) }
+            onChange={ this.onChange }
           >
-            <option value="Dinheiro">Dinheiro</option>
             <option value="Cartão de crédito">Cartão de crédito</option>
+            <option value="Dinheiro">Dinheiro</option>
             <option value="Cartão de débito">Cartão de débito</option>
           </select>
         </label>
-        <label htmlFor="category">
+        <label htmlFor="inputTag">
           Categoria
           <select
-            name="category"
+            id="inputTag"
+            name="tag"
             data-testid="tag-input"
-            onClick={ (e) => this.onCategoryHandleChange(e) }
+            onChange={ this.onChange }
           >
-            <option value="Alimentação">Alimentação</option>
             <option value="Lazer">Lazer</option>
+            <option value="Alimentação">Alimentação</option>
             <option value="Trabalho">Trabalho</option>
             <option value="Transporte">Transporte</option>
             <option value="Saúde">Saúde</option>
@@ -187,7 +120,7 @@ class WalletForm extends Component {
         </label>
         <button
           type="button"
-          onClick={ this.onHandleSubmit }
+          onClick={ (e) => this.onHandleSubmit(e) }
         >
           Adicionar Despesa
         </button>

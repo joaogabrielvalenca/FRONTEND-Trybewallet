@@ -1,11 +1,10 @@
-import { ADD_CURRENCIES, ADD_EXPENSES, ADD_TOTAL_EXPENSES, ADD_BLANK_ACTION } from '../actions';
+import { ADD_CURRENCIES, ADD_EXPENSES, REMOVE_EXPENSE } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [], // array de string
   expenses: [], // array de objetos, com cada objeto tendo as chaves id, value, currency, method, tag, description e exchangeRates
   editor: false, // valor booleano que indica de uma despesa está sendo editada
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
-  totalExpenses: 0,
   blank: '',
 };
 
@@ -20,21 +19,15 @@ const wallet = (state = INITIAL_STATE, action) => {
   case ADD_EXPENSES: {
     return {
       ...state,
-      expenses: action.payload,
+      expenses: [...state.expenses, action.payload],
     };
   }
-  case ADD_TOTAL_EXPENSES: {
+  case REMOVE_EXPENSE: {
     return {
       ...state,
-      totalExpenses: action.payload,
+      expenses: state.expenses.filter((item) => item !== action.payload),
     };
-    }
-    // case: ADD_BLANK_ACTION: {
-    //   return {
-    //     ...state,
-    //     blank: action.payload,
-    //   }
-    //   }
+  }
   default: return state;
   }
 };

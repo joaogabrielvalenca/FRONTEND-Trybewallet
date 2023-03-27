@@ -21,16 +21,16 @@ class Table extends Component {
       <table>
         <thead>
           <tr>
-            <td>Descrição</td>
-            <td>Tag</td>
-            <td>Método de pagamento</td>
-            <td>Valor</td>
+            <th>Descrição</th>
+            <th>Tag</th>
+            <th>Método de pagamento</th>
+            <th>Valor</th>
 
-            <td>Moeda</td>
-            <td>Câmbio utilizado</td>
-            <td>Valor convertido</td>
-            <td>Moeda de conversão</td>
-            <td>Editar/Excluir</td>
+            <th>Moeda</th>
+            <th>Câmbio utilizado</th>
+            <th>Valor convertido</th>
+            <th>Moeda de conversão</th>
+            <th>Editar/Excluir</th>
           </tr>
         </thead>
         <tbody>
@@ -57,8 +57,6 @@ class Table extends Component {
                   >
                     Editar despesa
                   </button>
-                </td>
-                <td>
                   <button
                     type="button"
                     data-testid="delete-btn"

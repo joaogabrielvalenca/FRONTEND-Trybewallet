@@ -5,7 +5,7 @@ import Proptypes from 'prop-types';
 class Header extends Component {
   getOutcomes = () => {
     const { expenses } = this.props;
-    if (expenses.length === 0) return 0;
+    if (expenses.length === 0) return '0.00';
     const result = expenses.reduce((acc, currVal) => {
       const { ask } = currVal.exchangeRates[currVal.currency];
       const exchange = Number(currVal.value) * Number(ask);

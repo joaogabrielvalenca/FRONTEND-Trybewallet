@@ -47,7 +47,7 @@ class WalletForm extends Component {
           Gasto
           <input
             id="inputValue"
-            type="number"
+            type="text"
             value={ value }
             name="value"
             data-testid="value-input"

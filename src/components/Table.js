@@ -20,6 +20,7 @@ class Table extends Component {
             <td>Tag</td>
             <td>Método de pagamento</td>
             <td>Valor</td>
+
             <td>Moeda</td>
             <td>Câmbio utilizado</td>
             <td>Valor convertido</td>
@@ -38,11 +39,20 @@ class Table extends Component {
                 <td>{expense.description}</td>
                 <td>{expense.tag}</td>
                 <td>{expense.method}</td>
-                <td>{expense.value}</td>
-                <td>{currentCurrency.name}</td>
+                <td>{Number(expense.value).toFixed(2)}</td>
                 <td>{expense.currency}</td>
+                <td>{Number(currentCurrency.ask).toFixed(2)}</td>
                 <td>{(expense.value * currentCurrency.ask).toFixed(2)}</td>
-                <td>Real</td>
+                <td>{currentCurrency.name}</td>
+                <td>
+                  <button
+                    type="button"
+                    data-testid="edit-btn"
+                    onClick={ () => this.handleEditExpense() }
+                  >
+                    Editar despesa
+                  </button>
+                </td>
                 <td>
                   <button
                     type="button"
@@ -51,9 +61,7 @@ class Table extends Component {
                   >
                     Excluir
                   </button>
-
                 </td>
-
               </tr>
             );
           })}

@@ -10,6 +10,11 @@ class Table extends Component {
     console.log(expense);
   };
 
+  handleEditExpense = () => {
+    const a = 'a';
+    return a;
+  };
+
   render() {
     const { expenses } = this.props;
     return (

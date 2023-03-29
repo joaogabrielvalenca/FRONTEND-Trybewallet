@@ -7,12 +7,11 @@ class Table extends Component {
   handleRemoveExpense = (expense) => {
     const { dispatch } = this.props;
     dispatch(removeExpense(expense));
-    console.log(expense);
   };
 
-  handleEditExpense = () => {
-    const a = 'a';
-    return a;
+  handleEditExpense = (expense) => {
+    const { dispatch } = this.props;
+    dispatch(selectExpense(expense));
   };
 
   render() {
@@ -53,7 +52,7 @@ class Table extends Component {
                   <button
                     type="button"
                     data-testid="edit-btn"
-                    onClick={ () => this.handleEditExpense() }
+                    onClick={ () => this.handleEditExpense(expense) }
                   >
                     Editar despesa
                   </button>
@@ -81,6 +80,7 @@ Table.propTypes = {
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
+  expenseToEdit: state.wallet.expenseToEdit,
 });
 
 export default connect(mapStateToProps)(Table);
